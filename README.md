@@ -6,7 +6,7 @@ Welcome to the Laravel + React Dashboard project! This project aims to provide a
 
 Before you start the project, ensure that your system meets the following requirements:
 
-1. PHP 7.4 or higher.
+1. PHP 8.2 or higher.
 2. Composer (https://getcomposer.org/)
 3. Node.js and npm (https://nodejs.org/)
 4. MySQL Server
