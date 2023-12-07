@@ -1,12 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { Icon } from '@iconify/react';
 
 export default function Register() {
+
+    const [viewPassword, setViewPassword] = useState(false)
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -65,12 +69,12 @@ export default function Register() {
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 relative">
                     <InputLabel htmlFor="password" value="Password" />
 
                     <TextInput
                         id="password"
-                        type="password"
+                        type={viewPassword ? "text" : "password"}
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
@@ -78,6 +82,10 @@ export default function Register() {
                         onChange={(e) => setData('password', e.target.value)}
                         required
                     />
+
+                    <button type='button' onClick={() => setViewPassword(!viewPassword)} className={`opacity-50 hover:opacity-100 text-[20px] text-white absolute right-3 bottom-[11px]`}>
+                        <Icon icon={viewPassword ? "codicon:eye-closed" : "codicon:eye"}/>
+                    </button>
 
                     <InputError message={errors.password} className="mt-2" />
                 </div>

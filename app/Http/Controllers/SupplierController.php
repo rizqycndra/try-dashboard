@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
 use App\Models\Supplier;
+use Inertia\Inertia;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
@@ -13,7 +18,11 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $supplier = Supplier::orderBy('created_at', 'desc')->get();
+
+        return Inertia::render('Supplier/Index', [
+            "supplier"      => $supplier
+        ]);
     }
 
     /**
@@ -21,15 +30,31 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Supplier/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSupplierRequest $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $request->validate([
+            "name"      => "required|string|max:120",
+            "address"   => "string|max:255",
+            "contact"   => "numeric",
+            "email"     => "email:dns|max:120"
+        ]);
+
+        $supplier = Supplier::create([
+            "name"      => $request->name,
+            "address"   => $request->address,
+            "contact"   => $request->contact,
+            "email"     => $request->email,
+        ]);
+
+        event(new Registered($supplier));
+
+        return redirect('/supplier');
     }
 
     /**
